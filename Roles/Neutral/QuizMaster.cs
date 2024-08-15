@@ -22,6 +22,8 @@ namespace EHR.Neutral
         private static OptionItem EnableCustomQuestionsOpt;
         private static OptionItem CustomQuestionChance;
 
+        private static readonly string CUSTOM_QUESTIONS_PATH = @"./EHR_DATA/QuizMasterQuestions.txt";
+        
         private static bool EnableCustomQuestions;
         private static Question[] CustomQuestions = [];
 
@@ -96,6 +98,11 @@ namespace EHR.Neutral
 
             if (EnableCustomQuestions)
             {
+                if (!File.Exists(CUSTOM_QUESTIONS_PATH))
+                {
+                    Logger.Warn("Creating a new QuizMasterQuestions.txt file", "QuizMaster");
+                    File.Create(CUSTOM_QUESTIONS_PATH).Close();
+                }
                 var lines = File.ReadAllLines("./EHR_DATA/QuizMasterQuestions.txt");
                 var questions = lines.Where(x => !string.IsNullOrWhiteSpace(x)).Select(x =>
                 {
